@@ -23,7 +23,7 @@ significativa). Estos datos se encuentran en dna_noise.data y dna_noise.test res
 
 """
 
-__author__ = 'juliowaissman'
+__author__ = 'Luis Fernando Suarez Astiazaran'
 
 
 import id3
@@ -116,13 +116,66 @@ def pruebaCART():
     Desarrolla en un módulo llamado cart.py una clase para realizar clasificación utilizando un árbol tipo CART para
     atributos cualitativos, que utilice al menos 3 criterios de prepoda (los mismos vistos para el árbol ID3
 
+"""
+
+    print "\nPrueba con la base de datos de DNA sin ruido"
+    print "----------------------------------------------"
+
+    datos, clases, atributos = carga_archivo("dna.data")
+    clasificador = cart.ArbolDecision(atributos)
+
+    clasificador.entrena(datos, clases)
+    clases_estimadas = clasificador.reconoce(datos)
+    error = error_clasif(clases, clases_estimadas)
+    print "Error de estimación en los mismos datos: "+str(error*100)+" %"
+
+    d_test, c_test, _ = carga_archivo("dna.test")
+    c_e_test = clasificador.reconoce(d_test)
+    e_test = error_clasif(c_test, c_e_test)
+    print "Error de estimación en los datos de prueba: "+str(e_test*100)+" %\n"
+
+    print "Y se generaron ", clasificador.numero_nodos, " nodos y ", clasificador.numero_hojas, " hojas."
+
+    print "\nPrueba con la base de datos de DNA con ruido"
+    print "----------------------------------------------"
+
+    datos, clases, atributos = carga_archivo("dna_noise.data")
+    clasificador_ruido = cart.ArbolDecision(atributos)
+
+    clasificador_ruido.entrena(datos, clases)
+    clases_estimadas = clasificador_ruido.reconoce(datos)
+    error = error_clasif(clases, clases_estimadas)
+    print "Error de estimación en los mismos datos: "+str(error*100)+"%"
+
+    d_test, c_test, _ = carga_archivo("dna_noise.test")
+    c_e_test = clasificador_ruido.reconoce(d_test)
+    e_test = error_clasif(c_test, c_e_test)
+    print "Error de estimación en los datos de prueba: "+str(e_test*100)+"%\n"
+
+    print "Y se generaron ", clasificador_ruido.numero_nodos, " nodos y ", clasificador_ruido.numero_hojas, " hojas."
+    
+    """
+
     Contesta las siguientes:
         + ¿Cual es la diferencia entre el árbol tipo CART y el ID3?
+    el cart se caracteriza por realizar particiones tipo binarias y el id3 hace busqueda rapida desde la raiz hasta las hojas
+        
         + ¿Cual es más eficiente?
+        el cart es mas eficiente
+
         + ¿Cuanto nodos genera cada uno?
+        429 y 425
+        
         + ¿Cuantos nodos hoja genera cada uno?
+        322 y 319
+        
         + ¿Cual tiene el menor error en los datos de prueba?
+        igual ya que se equilibran
+        
         + ¿A que crees que se debe que hay errores de aprendizaje con los datos de entrenamiento?
+        A que es la primera informacion que recibe el sistema y es limitada comparada con toda la informacion que requiere
+        para ser un clasificador universal
+
 
     """
     pass
